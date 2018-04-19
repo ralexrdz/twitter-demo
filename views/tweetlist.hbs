@@ -1,0 +1,13 @@
+<h1>Lista de tweets</h1>
+
+{{#if tweets.length}}
+  {{#each tweets}}
+    <div>
+      {{user}} - {{text}}
+    </div>
+  {{/each}}
+{{else}}
+  No hay tweets
+{{/if}}
+
+<a href="/addtweet"> Agrega nuevo tweet </a>
