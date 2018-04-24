@@ -8,7 +8,8 @@ const app = express()
 // const AuthController = require('./controllers/auth')
 
 const viewRoutes = require('./routes/views/index')
-const apiRoutes = require('./routes/apis/tweets')
+const tweetRoutes = require('./routes/apis/tweets')
+const userRoutes = require('./routes/apis/user')
 
 /// set
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -19,6 +20,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 
 viewRoutes(app)
-apiRoutes(app)
+tweetRoutes(app)
+userRoutes(app)
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
