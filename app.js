@@ -1,10 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const session = require('express-session')
-const passport = require('passport')
+// const session = require('express-session')
+// const passport = require('passport')
+var cookieParser = require('cookie-parser')
 const path = require('path')
 const app = express()
 
+app.use(cookieParser())
 // const AuthController = require('./controllers/auth')
 
 const viewRoutes = require('./routes/views/index')

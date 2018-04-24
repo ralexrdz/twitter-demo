@@ -1,7 +1,9 @@
 var UserModel = require('../models/user')
+var bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 function create (req, res, next) {
-  console.log('body', req.body)
+  console.log('create', req.body)
   // res.send('ey')
   let newUser = new UserModel(req.body)
   newUser.save(function (err, user) {
@@ -12,8 +14,25 @@ function create (req, res, next) {
 }
 
 function login (req, res, next) {
-  console.log('body', req.body)
-  res.send(req.body)
+
+  UserModel.findOne({email: req.body.email}, (err, user) => {
+    bcrypt.compare(req.body.password, user.password, function(err, samepass) {
+        if (samepass) {
+          console.log('encuentro', user)
+          jwt.sign({user}, 'secretkey', { expiresIn: '2d' }, (err, token) => {
+            if (err) return
+            console.log('token', token)
+            res.cookie('jwt', token)
+            res.json({
+              token
+            })
+          })
+        }
+        else {
+          res.sendStatus(403)
+        }
+    })
+  })
 }
 
 module.exports = {

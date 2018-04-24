@@ -1,10 +1,11 @@
+let token = ""
+
 
 function sendTweet () {
-  let user = document.querySelector('#tweet-user').value
+  if (token === "") alert('necesitas hacer login')
   let text = document.querySelector('#tweet-text').value
   let body = JSON.stringify(
     {
-      user,
       text
     }
   )
@@ -14,9 +15,11 @@ function sendTweet () {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
+    },
+    credentials: "include"
   })
   .then(function (res) {
+    console.log(res)
     res.json()
     .then(function (data) {
       document.location.href = '/'
@@ -33,6 +36,7 @@ function signup() {
       password
     }
   )
+  console.log('signup')
   fetch('http://localhost:3000/api/users', {
     method: 'POST',
     body: body,
@@ -50,7 +54,7 @@ function signup() {
 }
 
 
-function signup() {
+function login() {
   let email = document.querySelector('#email').value
   let password = document.querySelector('#password').value
   let body = JSON.stringify(
@@ -68,9 +72,10 @@ function signup() {
     }
   })
   .then(function (res) {
+    console.log(res.headers.get('Set-Cookie'))
     res.json()
     .then(function (data) {
-
+      token = data.token
       // guardar el token
     })
   })
