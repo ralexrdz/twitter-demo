@@ -6,9 +6,20 @@ module.exports = function (app) {
 
 function verifyToken (req, res, next) {
   // Get auth header value
-  console.log('cookies', req.signedCookies)
+  const bearerHeader = req.headers['authorization']
+  // Check if bearer is undefined
+  if (typeof bearerHeader !== 'undefined') {
+    // Split at the space
+    const bearer = bearerHeader.split(' ')
+    // Get token from array
+    const bearerToken = bearer[1]
+
     // Set the token
-  req.token = req.cookies.jwt
-  // Next middleware
-  next()
+    req.token = bearerToken
+    // Next middleware
+    next()
+  } else {
+    // Forbidden
+    res.sendStatus(403)
+  }
 }

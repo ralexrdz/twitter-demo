@@ -2,21 +2,21 @@ let token = ""
 
 
 function sendTweet () {
-  if (token === "") alert('necesitas hacer login')
+  console.log(window.sessionStorage.accessToken)
   let text = document.querySelector('#tweet-text').value
   let body = JSON.stringify(
     {
       text
     }
   )
-  fetch('http://localhost:3000/api/tweets', {
+  fetch('http://127.0.0.1:3000/api/tweets', {
     method: 'POST',
     body: body,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    credentials: "include"
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${window.sessionStorage.accessToken}`
+    }
   })
   .then(function (res) {
     console.log(res)
@@ -37,7 +37,7 @@ function signup() {
     }
   )
   console.log('signup')
-  fetch('http://localhost:3000/api/users', {
+  fetch('http://127.0.0.1:3000/api/users', {
     method: 'POST',
     body: body,
     headers: {
@@ -63,7 +63,7 @@ function login() {
       password
     }
   )
-  fetch('http://localhost:3000/api/users/login', {
+  fetch('http://127.0.0.1:3000/api/users/login', {
     method: 'POST',
     body: body,
     headers: {
@@ -72,10 +72,9 @@ function login() {
     }
   })
   .then(function (res) {
-    console.log(res.headers.get('Set-Cookie'))
     res.json()
     .then(function (data) {
-      token = data.token
+      window.sessionStorage.accessToken = data.token
       // guardar el token
     })
   })

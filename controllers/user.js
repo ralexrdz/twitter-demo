@@ -14,23 +14,24 @@ function create (req, res, next) {
 }
 
 function login (req, res, next) {
-
   UserModel.findOne({email: req.body.email}, (err, user) => {
-    bcrypt.compare(req.body.password, user.password, function(err, samepass) {
-        if (samepass) {
-          console.log('encuentro', user)
-          jwt.sign({user}, 'secretkey', { expiresIn: '2d' }, (err, token) => {
-            if (err) return
-            console.log('token', token)
-            res.cookie('jwt', token)
-            res.json({
-              token
-            })
+    console.log(err)
+    console.log(user)
+    bcrypt.compare(req.body.password, user.password, (err, samepass) => {
+      console.log(err)
+      if (samepass) {
+        console.log('encuentro', user)
+        jwt.sign({user}, 'secretkey', { expiresIn: '2d' }, (err, token) => {
+          if (err) return
+          console.log('token', token)
+          res.cookie('jwt', token)
+          res.json({
+            token
           })
-        }
-        else {
-          res.sendStatus(403)
-        }
+        })
+      } else {
+        res.sendStatus(403)
+      }
     })
   })
 }
